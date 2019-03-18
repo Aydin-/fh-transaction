@@ -20,7 +20,7 @@ import java.beans.PropertyVetoException;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "fh.aydin.fhtransaction.repository")
+@EnableJpaRepositories(basePackages = "fh.aydin.fhtransaction.repo")
 public class DatasourceConfig {
 
     @Bean
