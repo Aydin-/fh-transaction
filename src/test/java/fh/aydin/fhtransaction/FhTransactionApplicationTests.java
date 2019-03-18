@@ -15,6 +15,7 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
@@ -85,12 +86,16 @@ public class FhTransactionApplicationTests {
     @Test
     public void givenToken_whenPostGetSecureRequest_thenOk() throws Exception {
         final String accessToken = obtainAccessToken("admin", "jwtpass");
-        
-        mockMvc.perform(get("/api/transactions")
-                .header("Authorization", "Bearer " + accessToken)
-                .accept(CONTENT_TYPE))
+
+        MvcResult result = mockMvc
+                .perform(get("/api/transactions")
+                		.header("Authorization", "Bearer " + accessToken)
+                        .contentType(CONTENT_TYPE))
+                .andReturn();
+
+        mockMvc
+                .perform(asyncDispatch(result))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(CONTENT_TYPE))
                 .andExpect(jsonPath("$.[0].merchantId", is(MERCHANT_ID)));
         
         // @formatter:on
