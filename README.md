@@ -18,3 +18,10 @@ Example usage
 
 ### curl  http://fh-transaction.herokuapp.com/api/transactions -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidGVzdGp3dHJlc291cmNlaWQiXSwidXNlcl9uYW1lIjoiYWRtaW4iLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTUzMDM2MzkyLCJhdXRob3JpdGllcyI6WyJBRE1JTl9VU0VSIl0sImp0aSI6IjE5ZWYyNDIxLTdmY2UtNDhkZC1hNGIxLTE1OTJmYjlhZTE2MiIsImNsaWVudF9pZCI6InRlc3Rqd3RjbGllbnRpZCJ9.N1BAHudP59xwu6hUcEtM9EXkkgA4irdZ5Uuy8sWgJ64"
 
+---------------------------------
+Build locally
+---------------------------------
+mvn clean install
+
+Docker build: 
+mvn clean package docker:build
