@@ -16,7 +16,8 @@ CREATE TABLE USER (
 );
 
 CREATE TABLE CUSTOMER(
-   customerInfoid             BIT  NOT NULL PRIMARY KEY
+  id bigint(20) NOT NULL AUTO_INCREMENT,
+   customerInfo_id             BIT  NOT NULL PRIMARY KEY
   ,customerInfocreated_at     VARCHAR(19) NOT NULL
   ,customerInfoupdated_at     VARCHAR(19) NOT NULL
   ,customerInfodeleted_at     VARCHAR(4)

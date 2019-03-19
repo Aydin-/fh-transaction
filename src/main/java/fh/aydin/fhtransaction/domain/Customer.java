@@ -1,14 +1,20 @@
 package fh.aydin.fhtransaction.domain;
 
-import java.util.HashMap;
-import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+@Entity
+@Table(name = "CUSTOMER")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "customerInfo", "billingFirstName", "billingLastName", "billingCompany", "billingAddress1",
 		"billingAddress2", "billingCity", "billingPostcode", "billingState", "billingCountry", "billingPhone",
@@ -16,57 +22,61 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 		"shippingAddress2", "shippingCity", "shippingPostcode", "shippingState", "shippingCountry", "shippingPhone",
 		"shippingFax" })
 public class Customer {
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
+	
 	@JsonProperty("customerInfo")
+	@OneToOne(fetch = FetchType.EAGER, targetEntity = CustomerInfo.class)
 	private CustomerInfo customerInfo;
+	
 	@JsonProperty("billingFirstName")
 	private String billingFirstName;
 	@JsonProperty("billingLastName")
 	private String billingLastName;
 	@JsonProperty("billingCompany")
-	private Object billingCompany;
+	private String billingCompany;
 	@JsonProperty("billingAddress1")
 	private String billingAddress1;
 	@JsonProperty("billingAddress2")
-	private Object billingAddress2;
+	private String billingAddress2;
 	@JsonProperty("billingCity")
 	private String billingCity;
 	@JsonProperty("billingPostcode")
 	private String billingPostcode;
 	@JsonProperty("billingState")
-	private Object billingState;
+	private String billingState;
 	@JsonProperty("billingCountry")
 	private String billingCountry;
 	@JsonProperty("billingPhone")
-	private Object billingPhone;
+	private String billingPhone;
 	@JsonProperty("billingFax")
-	private Object billingFax;
+	private String billingFax;
 	@JsonProperty("shippingTitle")
-	private Object shippingTitle;
+	private String shippingTitle;
 	@JsonProperty("shippingFirstName")
 	private String shippingFirstName;
 	@JsonProperty("shippingLastName")
 	private String shippingLastName;
 	@JsonProperty("shippingCompany")
-	private Object shippingCompany;
+	private String shippingCompany;
 	@JsonProperty("shippingAddress1")
 	private String shippingAddress1;
 	@JsonProperty("shippingAddress2")
-	private Object shippingAddress2;
+	private String shippingAddress2;
 	@JsonProperty("shippingCity")
 	private String shippingCity;
 	@JsonProperty("shippingPostcode")
 	private String shippingPostcode;
 	@JsonProperty("shippingState")
-	private Object shippingState;
+	private String shippingState;
 	@JsonProperty("shippingCountry")
 	private String shippingCountry;
 	@JsonProperty("shippingPhone")
-	private Object shippingPhone;
+	private String shippingPhone;
 	@JsonProperty("shippingFax")
-	private Object shippingFax;
-	@JsonIgnore
-	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+	private String shippingFax;
 
 	@JsonProperty("customerInfo")
 	public CustomerInfo getCustomerInfo() {
@@ -99,12 +109,12 @@ public class Customer {
 	}
 
 	@JsonProperty("billingCompany")
-	public Object getBillingCompany() {
+	public String getBillingCompany() {
 		return billingCompany;
 	}
 
 	@JsonProperty("billingCompany")
-	public void setBillingCompany(Object billingCompany) {
+	public void setBillingCompany(String billingCompany) {
 		this.billingCompany = billingCompany;
 	}
 
@@ -119,12 +129,12 @@ public class Customer {
 	}
 
 	@JsonProperty("billingAddress2")
-	public Object getBillingAddress2() {
+	public String getBillingAddress2() {
 		return billingAddress2;
 	}
 
 	@JsonProperty("billingAddress2")
-	public void setBillingAddress2(Object billingAddress2) {
+	public void setBillingAddress2(String billingAddress2) {
 		this.billingAddress2 = billingAddress2;
 	}
 
@@ -149,12 +159,12 @@ public class Customer {
 	}
 
 	@JsonProperty("billingState")
-	public Object getBillingState() {
+	public String getBillingState() {
 		return billingState;
 	}
 
 	@JsonProperty("billingState")
-	public void setBillingState(Object billingState) {
+	public void setBillingState(String billingState) {
 		this.billingState = billingState;
 	}
 
@@ -169,32 +179,32 @@ public class Customer {
 	}
 
 	@JsonProperty("billingPhone")
-	public Object getBillingPhone() {
+	public String getBillingPhone() {
 		return billingPhone;
 	}
 
 	@JsonProperty("billingPhone")
-	public void setBillingPhone(Object billingPhone) {
+	public void setBillingPhone(String billingPhone) {
 		this.billingPhone = billingPhone;
 	}
 
 	@JsonProperty("billingFax")
-	public Object getBillingFax() {
+	public String getBillingFax() {
 		return billingFax;
 	}
 
 	@JsonProperty("billingFax")
-	public void setBillingFax(Object billingFax) {
+	public void setBillingFax(String billingFax) {
 		this.billingFax = billingFax;
 	}
 
 	@JsonProperty("shippingTitle")
-	public Object getShippingTitle() {
+	public String getShippingTitle() {
 		return shippingTitle;
 	}
 
 	@JsonProperty("shippingTitle")
-	public void setShippingTitle(Object shippingTitle) {
+	public void setShippingTitle(String shippingTitle) {
 		this.shippingTitle = shippingTitle;
 	}
 
@@ -219,12 +229,12 @@ public class Customer {
 	}
 
 	@JsonProperty("shippingCompany")
-	public Object getShippingCompany() {
+	public String getShippingCompany() {
 		return shippingCompany;
 	}
 
 	@JsonProperty("shippingCompany")
-	public void setShippingCompany(Object shippingCompany) {
+	public void setShippingCompany(String shippingCompany) {
 		this.shippingCompany = shippingCompany;
 	}
 
@@ -239,12 +249,12 @@ public class Customer {
 	}
 
 	@JsonProperty("shippingAddress2")
-	public Object getShippingAddress2() {
+	public String getShippingAddress2() {
 		return shippingAddress2;
 	}
 
 	@JsonProperty("shippingAddress2")
-	public void setShippingAddress2(Object shippingAddress2) {
+	public void setShippingAddress2(String shippingAddress2) {
 		this.shippingAddress2 = shippingAddress2;
 	}
 
@@ -269,12 +279,12 @@ public class Customer {
 	}
 
 	@JsonProperty("shippingState")
-	public Object getShippingState() {
+	public String getShippingState() {
 		return shippingState;
 	}
 
 	@JsonProperty("shippingState")
-	public void setShippingState(Object shippingState) {
+	public void setShippingState(String shippingState) {
 		this.shippingState = shippingState;
 	}
 
@@ -289,33 +299,23 @@ public class Customer {
 	}
 
 	@JsonProperty("shippingPhone")
-	public Object getShippingPhone() {
+	public String getShippingPhone() {
 		return shippingPhone;
 	}
 
 	@JsonProperty("shippingPhone")
-	public void setShippingPhone(Object shippingPhone) {
+	public void setShippingPhone(String shippingPhone) {
 		this.shippingPhone = shippingPhone;
 	}
 
 	@JsonProperty("shippingFax")
-	public Object getShippingFax() {
+	public String getShippingFax() {
 		return shippingFax;
 	}
 
 	@JsonProperty("shippingFax")
-	public void setShippingFax(Object shippingFax) {
+	public void setShippingFax(String shippingFax) {
 		this.shippingFax = shippingFax;
-	}
-
-	@JsonAnyGetter
-	public Map<String, Object> getAdditionalProperties() {
-		return this.additionalProperties;
-	}
-
-	@JsonAnySetter
-	public void setAdditionalProperty(String name, Object value) {
-		this.additionalProperties.put(name, value);
 	}
 
 }

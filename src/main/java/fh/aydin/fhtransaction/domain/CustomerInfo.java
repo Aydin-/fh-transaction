@@ -1,59 +1,78 @@
 package fh.aydin.fhtransaction.domain;
 
-import java.util.HashMap;
-import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Entity
+@Table(name = "CUSTOMER")
 @JsonPropertyOrder({ "id", "created_at", "updated_at", "deleted_at", "number", "expiryMonth", "expiryYear",
 		"startMonth", "startYear", "issueNumber", "email", "birthday", "gender", "billingTitle", "Authorization" })
 public class CustomerInfo {
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	@JsonProperty("id")
-	private Integer id;
+	private Long id;
+
 	@JsonProperty("created_at")
+	@Column(name = "customerInfocreated_at")
 	private String createdAt;
 	@JsonProperty("updated_at")
+	@Column(name = "customerInfoupdated_at")
 	private String updatedAt;
 	@JsonProperty("deleted_at")
+	@Column(name = "customerInfodeleted_at")
 	private String deletedAt;
 	@JsonProperty("number")
+	@Column(name = "customerInfonumber")
 	private String number;
 	@JsonProperty("expiryMonth")
+	@Column(name = "customerInfoexpiryMonth")
 	private String expiryMonth;
 	@JsonProperty("expiryYear")
+	@Column(name = "customerInfoexpiryYear")
 	private String expiryYear;
 	@JsonProperty("startMonth")
+	@Column(name = "customerInfostartMonth")
 	private String startMonth;
 	@JsonProperty("startYear")
-	private Object startYear;
+	@Column(name = "customerInfostartYear")
+	private String startYear;
 	@JsonProperty("issueNumber")
-	private Object issueNumber;
+	@Column(name = "customerInfoissueNumber")
+	private String issueNumber;
 	@JsonProperty("email")
+	@Column(name = "customerInfoemail")
 	private String email;
 	@JsonProperty("birthday")
+	@Column(name = "customerInfobirthday")
 	private String birthday;
 	@JsonProperty("gender")
-	private Object gender;
+	@Column(name = "customerInfogender")
+	private String gender;
 	@JsonProperty("billingTitle")
-	private Object billingTitle;
+	@Column(name = "customerInfobillingTitle")
+	private String billingTitle;
 	@JsonProperty("Authorization")
+	@Column(name = "customerInfoAuthorization")
 	private String authorization;
-	@JsonIgnore
-	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 	@JsonProperty("id")
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
 	@JsonProperty("id")
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -128,22 +147,22 @@ public class CustomerInfo {
 	}
 
 	@JsonProperty("startYear")
-	public Object getStartYear() {
+	public String getStartYear() {
 		return startYear;
 	}
 
 	@JsonProperty("startYear")
-	public void setStartYear(Object startYear) {
+	public void setStartYear(String startYear) {
 		this.startYear = startYear;
 	}
 
 	@JsonProperty("issueNumber")
-	public Object getIssueNumber() {
+	public String getIssueNumber() {
 		return issueNumber;
 	}
 
 	@JsonProperty("issueNumber")
-	public void setIssueNumber(Object issueNumber) {
+	public void setIssueNumber(String issueNumber) {
 		this.issueNumber = issueNumber;
 	}
 
@@ -168,22 +187,22 @@ public class CustomerInfo {
 	}
 
 	@JsonProperty("gender")
-	public Object getGender() {
+	public String getGender() {
 		return gender;
 	}
 
 	@JsonProperty("gender")
-	public void setGender(Object gender) {
+	public void setGender(String gender) {
 		this.gender = gender;
 	}
 
 	@JsonProperty("billingTitle")
-	public Object getBillingTitle() {
+	public String getBillingTitle() {
 		return billingTitle;
 	}
 
 	@JsonProperty("billingTitle")
-	public void setBillingTitle(Object billingTitle) {
+	public void setBillingTitle(String billingTitle) {
 		this.billingTitle = billingTitle;
 	}
 
@@ -195,16 +214,6 @@ public class CustomerInfo {
 	@JsonProperty("Authorization")
 	public void setAuthorization(String authorization) {
 		this.authorization = authorization;
-	}
-
-	@JsonAnyGetter
-	public Map<String, Object> getAdditionalProperties() {
-		return this.additionalProperties;
-	}
-
-	@JsonAnySetter
-	public void setAdditionalProperty(String name, Object value) {
-		this.additionalProperties.put(name, value);
 	}
 
 }

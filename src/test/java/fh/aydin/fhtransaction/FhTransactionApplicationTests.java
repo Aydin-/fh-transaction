@@ -34,71 +34,74 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("mvc")
 public class FhTransactionApplicationTests {
 
-    @Autowired
-    private WebApplicationContext wac;
+	private static final String CLIENT_ID = "testjwtclientid";
+	private static final String CLIENT_SECRET = "XY7kmzoNzl100";
+	private static final String CONTENT_TYPE = "application/json;charset=UTF-8";
+	private static final String JWTPASS = "jwtpass";
+	private static final String ADMIN_USER = "admin";
+	private static final Integer MERCHANT_ID = 1;
+	private static final String MICHAEL = "Michael";
+	
+	@Autowired
+	private WebApplicationContext wac;
 
-    @Autowired
-    private FilterChainProxy springSecurityFilterChain;
+	@Autowired
+	private FilterChainProxy springSecurityFilterChain;
 
-    private MockMvc mockMvc;
+	private MockMvc mockMvc;
 
-    private static final String CLIENT_ID = "testjwtclientid";
-    private static final String CLIENT_SECRET = "XY7kmzoNzl100";
+	@Before
+	public void setup() {
+		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).addFilter(springSecurityFilterChain).build();
+	}
 
-    private static final String CONTENT_TYPE = "application/json;charset=UTF-8";
+	private String obtainAccessToken(String username, String password) throws Exception {
+		final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+		params.add("grant_type", "password");
+		params.add("client_id", CLIENT_ID);
+		params.add("username", username);
+		params.add("password", password);
 
-    private static final Integer MERCHANT_ID = 1;
+		ResultActions result = mockMvc
+				.perform(post("/oauth/token").params(params).with(httpBasic(CLIENT_ID, CLIENT_SECRET))
+						.accept(CONTENT_TYPE))
+				.andExpect(status().isOk()).andExpect(content().contentType(CONTENT_TYPE));
 
-    @Before
-    public void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).addFilter(springSecurityFilterChain).build();
-    }
+		String resultString = result.andReturn().getResponse().getContentAsString();
 
-    private String obtainAccessToken(String username, String password) throws Exception {
-        final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "password");
-        params.add("client_id", CLIENT_ID);
-        params.add("username", username);
-        params.add("password", password);
+		JacksonJsonParser jsonParser = new JacksonJsonParser();
+		return jsonParser.parseMap(resultString).get("access_token").toString();
+	}
 
-        // @formatter:off
+	@Test
+	public void givenNoToken_whenGetSecureRequest_thenUnauthorized() throws Exception {
+		mockMvc.perform(get("/api/transactions")).andExpect(status().isUnauthorized());
+	}
 
-        ResultActions result = mockMvc.perform(post("/oauth/token")
-                               .params(params)
-                               .with(httpBasic(CLIENT_ID, CLIENT_SECRET))
-                               .accept(CONTENT_TYPE))
-                               .andExpect(status().isOk())
-                               .andExpect(content().contentType(CONTENT_TYPE));
-        
-        // @formatter:on
+	@Test
+	public void givenToken_whenPostGetSecureRequestTransactions_thenOk() throws Exception {
+		final String accessToken = obtainAccessToken(ADMIN_USER, JWTPASS);
 
-        String resultString = result.andReturn().getResponse().getContentAsString();
+		MvcResult result = mockMvc.perform(
+				get("/api/transactions").header("Authorization", "Bearer " + accessToken).contentType(CONTENT_TYPE))
+				.andReturn();
 
-        JacksonJsonParser jsonParser = new JacksonJsonParser();
-        return jsonParser.parseMap(resultString).get("access_token").toString();
-    }
+		mockMvc.perform(asyncDispatch(result)).andExpect(status().isOk())
+				.andExpect(jsonPath("$.[0].merchantId", is(MERCHANT_ID)));
 
-    @Test
-    public void givenNoToken_whenGetSecureRequest_thenUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/transactions")).andExpect(status().isUnauthorized());
-    }
+	}
+	
+	@Test
+	public void givenToken_whenPostGetSecureRequestCustomers_thenOk() throws Exception {
+		final String accessToken = obtainAccessToken(ADMIN_USER, JWTPASS);
 
-    @Test
-    public void givenToken_whenPostGetSecureRequest_thenOk() throws Exception {
-        final String accessToken = obtainAccessToken("admin", "jwtpass");
+		MvcResult result = mockMvc.perform(
+				get("/api/client").header("Authorization", "Bearer " + accessToken).contentType(CONTENT_TYPE))
+				.andReturn();
 
-        MvcResult result = mockMvc
-                .perform(get("/api/transactions")
-                		.header("Authorization", "Bearer " + accessToken)
-                        .contentType(CONTENT_TYPE))
-                .andReturn();
+		mockMvc.perform(asyncDispatch(result)).andExpect(status().isOk())
+				.andExpect(jsonPath("$.[0].billingFirstName", is(MICHAEL)));
 
-        mockMvc
-                .perform(asyncDispatch(result))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].merchantId", is(MERCHANT_ID)));
-        
-        // @formatter:on
-    }
+	}
 
 }
