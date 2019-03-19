@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import fh.aydin.fhtransaction.domain.Customer;
 
 @Repository
-public interface CustomerRepository extends CrudRepository<Customer, Long> {
+public interface CustomerInfo extends CrudRepository<Customer, Long> {
 
 }

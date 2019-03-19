@@ -41,7 +41,8 @@ public class FhTransactionApplicationTests {
 	private static final String ADMIN_USER = "admin";
 	private static final Integer MERCHANT_ID = 1;
 	private static final String MICHAEL = "Michael";
-	
+	private static final String AYDIN = "Aydin";
+
 	@Autowired
 	private WebApplicationContext wac;
 
@@ -90,17 +91,33 @@ public class FhTransactionApplicationTests {
 				.andExpect(jsonPath("$.[0].merchantId", is(MERCHANT_ID)));
 
 	}
-	
+
 	@Test
 	public void givenToken_whenPostGetSecureRequestCustomers_thenOk() throws Exception {
 		final String accessToken = obtainAccessToken(ADMIN_USER, JWTPASS);
 
-		MvcResult result = mockMvc.perform(
-				get("/api/client").header("Authorization", "Bearer " + accessToken).contentType(CONTENT_TYPE))
+		MvcResult result = mockMvc
+				.perform(get("/api/client").header("Authorization", "Bearer " + accessToken).contentType(CONTENT_TYPE))
 				.andReturn();
 
 		mockMvc.perform(asyncDispatch(result)).andExpect(status().isOk())
-				.andExpect(jsonPath("$.[0].billingFirstName", is(MICHAEL)));
+				.andExpect(jsonPath("$.[1].billingFirstName", is(MICHAEL)))
+				.andExpect(jsonPath("$.[0].billingFirstName", is(AYDIN)));
+
+	}
+
+	@Test
+	public void givenToken_whenPostGetSecureRequestOneCustomer_thenOk() throws Exception {
+		final String accessToken = obtainAccessToken(ADMIN_USER, JWTPASS);
+
+		MvcResult result = mockMvc
+				.perform(
+						get("/api/client/1").header("Authorization", "Bearer " + accessToken).contentType(CONTENT_TYPE))
+				.andReturn();
+
+		mockMvc.perform(asyncDispatch(result)).andExpect(status().isOk())
+				.andExpect(jsonPath("$.billingFirstName", is(AYDIN)))
+				.andExpect(jsonPath("$.customerInfo.email", is("aydinbg@gmail.com")));
 
 	}
 
